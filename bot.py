@@ -1,9 +1,24 @@
 import asyncio
-import json
 import os
 import sys
 import random
 from playwright.async_api import async_playwright
+
+# HARDCODED CREDENTIALS
+ACCOUNTS = [
+    {
+        "email": "saipavan7748@gmail.com",
+        "password": "Sai@1234"
+    },
+    {
+        "email": "skywalker774826@gmail.com",
+        "password": "Sky@1234"
+    },
+    {
+        "email": "adupasrivankumar@gmail.com",
+        "password": "Srivan@1234"
+    }
+]
 
 LOGIN_URL = "https://app.chartacademy.com/login"
 INITIAL_VIDEO_URL = "https://app.chartacademy.com/masterclasses/465/video/500"
@@ -25,14 +40,14 @@ async def watch_account(account_label, username, password, browser):
         await page.goto(LOGIN_URL, wait_until="domcontentloaded")
         await asyncio.sleep(2)
 
-        # Fill credentials (adjust selectors if site uses different input names/IDs)
+        # Fill credentials
         print(f"[{account_label}] Logging in...")
         await page.fill("input[name='email'], input[type='email'], #email", username)
         await page.fill("input[name='password'], input[type='password'], #password", password)
         await page.click("button[type='submit'], input[type='submit'], button:has-text('Login')")
         await page.wait_for_load_state("networkidle")
 
-        # Navigate directly to the video URL if not redirected
+        # Navigate directly to the video URL
         print(f"[{account_label}] Navigating to video page...")
         await page.goto(INITIAL_VIDEO_URL, wait_until="domcontentloaded")
         await asyncio.sleep(3)
@@ -119,13 +134,6 @@ async def watch_account(account_label, username, password, browser):
 
 
 async def main():
-    accounts_json = os.getenv("ACCOUNTS_JSON")
-    if not accounts_json:
-        print("Error: ACCOUNTS_JSON secret is missing.")
-        sys.exit(1)
-
-    accounts = json.loads(accounts_json)
-
     async with async_playwright() as p:
         browser = await p.chromium.launch(
             headless=True,
@@ -138,7 +146,7 @@ async def main():
 
         tasks = [
             watch_account(f"Account-{i+1}", acc["email"], acc["password"], browser)
-            for i, acc in enumerate(accounts)
+            for i, acc in enumerate(ACCOUNTS)
         ]
 
         await asyncio.gather(*tasks)
