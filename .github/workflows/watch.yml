@@ -1,0 +1,30 @@
+name: ChartAcademy Auto Watch
+
+on:
+  schedule:
+    # 06:55 UTC = 12:25 PM IST
+    - cron: '4 7 * * *'
+  workflow_dispatch: # Allows manual run button in GitHub Actions tab
+
+jobs:
+  run-watch-bot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install playwright
+          playwright install chromium --with-deps
+
+      - name: Execute watch script
+        run: python bot.py
