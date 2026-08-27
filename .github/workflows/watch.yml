@@ -9,7 +9,7 @@ on:
 jobs:
   run-watch-bot:
     runs-on: ubuntu-latest
-    timeout-minutes: 33
+    timeout-minutes: 36
 
     steps:
       - name: Check out repository
