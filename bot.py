@@ -22,7 +22,7 @@ ACCOUNTS = [
 
 LOGIN_URL = "https://app.chartacademy.com/login"
 INITIAL_VIDEO_URL = "https://app.chartacademy.com/masterclasses/331/video/331"
-WATCH_DURATION_MINUTES = 35
+WATCH_DURATION_MINUTES = 33
 
 
 async def watch_account(account_label, username, password, browser):
