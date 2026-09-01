@@ -9,11 +9,16 @@ on:
 jobs:
   run-watch-bot:
     runs-on: ubuntu-latest
-    timeout-minutes: 36
+    timeout-minutes: 45
+
+    permissions:
+      contents: write # Enables git push to update state.json automatically
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true # Retains auth tokens for git push
 
       - name: Set up Python
         uses: actions/setup-python@v5
